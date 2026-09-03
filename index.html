@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PASARELA INTERNA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0B0C;
+    --ink-2:#141416;
+    --paper:#F6F4EF;
+    --paper-dim:#EAE7DF;
+    --gold:#C6A15B;
+    --gold-soft:#E8D5AC;
+    --celeste:#B8974E;
+    --silver:#C7C9CC;
+    --text-hi:#F5F3EE;
+    --text-mid:#B9B7B0;
+    --text-low:#7C7A74;
+    --line:rgba(199,201,204,0.18);
+    --line-onlight:rgba(11,11,12,0.1);
+    --gold-deep:#8a6f3a;
+    --display: 'Inter', -apple-system, sans-serif;
+    --body: 'Inter', -apple-system, sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --maxw: 1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--body);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;}
+  section{position:relative;}
+
+  h1,h2,h3,.disp{
+    font-family:var(--display);
+    letter-spacing:-0.02em;
+    line-height:1.05;
+    font-weight:800;
+  }
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:12px;
+    letter-spacing:0.22em;
+    text-transform:uppercase;
+    color:var(--gold);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:24px;height:1px;
+    background:var(--gold);
+    display:inline-block;
+  }
+  .eyebrow.light{color:#8a6f3a;}
+  .eyebrow.light::before{background:#8a6f3a;}
+
+  p.lead{color:var(--text-mid);font-size:17px;max-width:52ch;}
+  .fade{opacity:0;transform:translateY(24px);transition:opacity .7s ease, transform .7s ease;}
+  .fade.in{opacity:1;transform:translateY(0);}
+
+  /* ---------- BUTTONS ---------- */
+  .btn{
+    display:inline-flex;align-items:center;gap:10px;
+    font-family:var(--mono);
+    font-size:13px;letter-spacing:0.08em;
+    text-transform:uppercase;
+    padding:16px 26px;
+    border-radius:2px;
+    border:1px solid transparent;
+    cursor:pointer;
+    transition:transform .25s ease, background .25s ease, border-color .25s ease;
+    white-space:nowrap;
+  }
+  .btn:hover{transform:translateY(-2px);}
+  .btn-primary{background:var(--gold);color:#0B0B0C;font-weight:600;}
+  .btn-primary:hover{background:var(--gold-soft);}
+  .btn-outline{border-color:var(--silver);color:var(--text-hi);}
+  .btn-outline:hover{border-color:var(--celeste);color:var(--celeste);}
+  .btn-dark{background:var(--ink);color:var(--paper);}
+  .btn-dark:hover{background:#000;}
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;margin-top:32px;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:120px 0 80px;
+    background:
+      linear-gradient(180deg, rgba(11,11,12,0.6) 0%, rgba(11,11,12,0.88) 65%, var(--ink) 100%),
+      url('https://d1yei2z3i6k35z.cloudfront.net/11254295/699b859fe5e0c_PasarelainternaPresentaci%C3%B3n.png') center 20%/cover no-repeat;
+  }
+  .hero .wrap{position:relative;z-index:2;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:60px;align-items:center;}
+  .hero h1{
+    font-size:clamp(34px, 4.6vw, 54px);
+    margin:20px 0 20px;
+    max-width:16ch;
+    color:var(--text-hi);
+    line-height:1.12;
+  }
+  .hero h1 em{font-style:normal;color:var(--gold);}
+  .hero-close{
+    font-style:italic;color:var(--text-mid);font-size:14px;
+    margin-top:26px;max-width:42ch;border-left:1px solid var(--gold);padding-left:16px;
+  }
+  .hero-alt{
+    display:inline-block;margin-top:22px;font-family:var(--mono);font-size:12px;
+    color:var(--text-low);letter-spacing:0.03em;
+  }
+  .hero-alt a{color:var(--text-mid);border-bottom:1px solid var(--line);}
+
+  .membership-card{
+    background:linear-gradient(165deg,#141416 0%,#0B0B0C 100%);
+    border:1px solid rgba(198,161,91,0.35);
+    border-radius:6px;
+    padding:38px 34px;
+    box-shadow:0 30px 60px rgba(0,0,0,0.45);
+  }
+  .card-label{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.24em;
+    text-transform:uppercase;color:var(--gold);
+  }
+  .card-divider{height:1px;background:linear-gradient(90deg, rgba(198,161,91,0.6), rgba(198,161,91,0));margin:20px 0;}
+  .card-benefits{list-style:none;}
+  .card-benefits li{
+    font-size:14.5px;color:var(--text-hi);
+    padding:10px 0 10px 26px;position:relative;
+  }
+  .card-benefits li::before{
+    content:'✓';position:absolute;left:0;top:10px;color:var(--gold);
+    font-family:var(--mono);font-size:13px;
+  }
+  .card-access{font-family:var(--mono);font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-low);}
+  .card-price{font-family:var(--display);font-size:44px;color:var(--gold);margin:8px 0 22px;letter-spacing:-0.01em;}
+  .card-price span{font-family:var(--mono);font-size:14px;color:var(--text-low);letter-spacing:0.06em;margin-left:6px;}
+  .card-cta{width:100%;justify-content:center;text-align:center;}
+
+  @media (max-width:860px){
+    .hero-grid{grid-template-columns:1fr;gap:40px;}
+    .membership-card{padding:30px 26px;}
+  }
+  .hero-stats{
+    display:flex;gap:28px;flex-wrap:wrap;
+    margin-top:48px;padding-top:28px;
+    border-top:1px solid var(--line);
+  }
+  .stat{font-family:var(--mono);}
+  .stat b{display:block;font-size:22px;color:var(--celeste);font-weight:600;}
+  .stat span{font-size:12px;color:var(--text-low);text-transform:uppercase;letter-spacing:0.06em;}
+
+  /* ---------- LIGHT SECTION (asesoria) ---------- */
+  .section-light{
+    background:var(--paper);
+    color:var(--ink);
+    padding:100px 0;
+  }
+  .section-light h2{color:var(--ink);font-size:clamp(32px,5vw,54px);margin:16px 0 20px;}
+  .section-light p.lead{color:#4a483f;}
+  .advise-grid{
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;
+    margin-top:48px;align-items:start;
+  }
+  .advise-list{list-style:none;}
+  .advise-list li{
+    display:flex;gap:16px;padding:18px 0;
+    border-bottom:1px solid rgba(11,11,12,0.12);
+    font-size:15px;
+  }
+  .advise-list li:first-child{border-top:1px solid rgba(11,11,12,0.12);}
+  .advise-num{
+    font-family:var(--mono);color:var(--gold-deep);font-size:13px;
+    flex-shrink:0;padding-top:2px;
+  }
+  .advise-card{
+    background:var(--ink);color:var(--text-hi);
+    padding:36px 32px;border-radius:2px;
+    position:relative;overflow:hidden;
+  }
+  .advise-card::after{
+    content:'';position:absolute;inset:0;
+    background:radial-gradient(circle at 100% 0%, rgba(127,209,227,0.12), transparent 60%);
+    pointer-events:none;
+  }
+  .advise-card .price-tag{font-family:var(--mono);font-size:13px;color:var(--celeste);letter-spacing:0.08em;text-transform:uppercase;}
+  .advise-card h3{font-size:30px;margin:12px 0 14px;color:var(--paper);}
+  .advise-card p{color:var(--text-mid);font-size:14px;margin-bottom:24px;}
+
+  /* ---------- OFFERS / BACKSTAGE PASSES ---------- */
+  .offers{padding:110px 0 90px;}
+  .offers-head{max-width:640px;margin-bottom:60px;}
+  .offers-head h2{font-size:clamp(34px,5.5vw,56px);margin:16px 0;}
+  .pass-grid{
+    display:grid;grid-template-columns:repeat(2,1fr);gap:26px;
+    max-width:840px;margin:0 auto;
+  }
+  .pass{
+    background:var(--ink-2);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:0;
+    position:relative;
+    display:flex;flex-direction:column;
+    transition:transform .3s ease, border-color .3s ease;
+  }
+  .pass:hover{transform:translateY(-6px);border-color:var(--gold);}
+  .pass.featured{border-color:var(--gold);background:linear-gradient(165deg, #17140d 0%, var(--ink-2) 45%);}
+  .pass-top{padding:28px 26px 22px;}
+  .pass-badge{
+    font-family:var(--mono);font-size:11px;letter-spacing:0.12em;
+    text-transform:uppercase;color:var(--gold);
+    border:1px solid var(--gold);
+    display:inline-block;padding:5px 10px;border-radius:20px;
+  }
+  .pass.featured .pass-badge{background:var(--gold);color:#0B0B0C;}
+  .pass h3{font-size:30px;margin:16px 0 6px;color:var(--paper);}
+  .pass-price{font-family:var(--mono);font-size:16px;color:var(--celeste);margin-bottom:4px;}
+  .pass-price small{color:var(--text-low);font-size:12px;}
+  .pass-perf{
+    position:relative;
+    border-top:1px dashed var(--line);
+    margin:0 26px;
+  }
+  .pass-perf::before,.pass-perf::after{
+    content:'';position:absolute;top:-8px;width:16px;height:16px;
+    background:var(--ink);border-radius:50%;border:1px solid var(--line);
+  }
+  .pass-perf::before{left:-34px;}
+  .pass-perf::after{right:-34px;}
+  .pass-body{padding:22px 26px 28px;flex:1;display:flex;flex-direction:column;}
+  .pass-body ul{list-style:none;margin-bottom:24px;flex:1;}
+  .pass-body li{
+    font-size:14px;color:var(--text-mid);
+    padding:8px 0 8px 20px;position:relative;
+  }
+  .pass-body li::before{
+    content:'→';position:absolute;left:0;color:var(--gold);
+  }
+  .pass .btn{width:100%;justify-content:center;}
+  .pass-stamp{
+    position:absolute;top:22px;right:22px;
+    font-family:var(--mono);font-size:10px;color:var(--text-low);
+    border:1px solid var(--line);border-radius:50%;
+    width:44px;height:44px;display:flex;align-items:center;justify-content:center;
+    text-align:center;line-height:1.1;letter-spacing:0.02em;
+  }
+
+  /* ---------- IMPULSO GANADOR ---------- */
+  .ig-hero{
+    padding:110px 0 70px;
+    background:
+      linear-gradient(180deg, rgba(11,11,12,0.7), rgba(11,11,12,0.94)),
+      url('https://d1yei2z3i6k35z.cloudfront.net/11254295/699b8f52831b3_PasarelainternaPresentaci%C3%B3n.png') center/cover no-repeat;
+  }
+  .ig-hero h2{font-size:clamp(36px,6.5vw,68px);margin:16px 0 18px;max-width:16ch;color:var(--text-hi);}
+  .ig-checklist{
+    list-style:none;margin:44px 0 0;
+    display:grid;grid-template-columns:1fr 1fr;gap:18px 40px;
+  }
+  .ig-checklist li{
+    font-size:15px;color:var(--text-hi);
+    padding-left:30px;position:relative;
+  }
+  .ig-checklist li::before{
+    content:'✓';position:absolute;left:0;top:0;
+    color:var(--celeste);font-weight:700;
+  }
+
+  .ig-includes{padding:70px 0 30px;}
+  .includes-grid{
+    display:grid;grid-template-columns:1.15fr 0.85fr;gap:56px;
+    margin-top:26px;align-items:start;
+  }
+  .includes-list{list-style:none;}
+  .includes-block{margin-bottom:30px;}
+  .includes-block h4{
+    font-family:var(--mono);font-size:12px;letter-spacing:0.1em;
+    text-transform:uppercase;color:var(--gold-deep);margin-bottom:14px;
+  }
+  .includes-list li{
+    display:flex;gap:14px;padding:12px 0;
+    border-bottom:1px solid var(--line-onlight);
+    font-size:14.5px;color:#4a483f;
+  }
+  .includes-list li:first-child{border-top:1px solid var(--line-onlight);}
+  .includes-num{
+    font-family:var(--mono);color:var(--gold-deep);font-size:13px;
+    flex-shrink:0;padding-top:1px;
+  }
+  .includes-photos{
+    display:grid;grid-template-columns:1fr 1fr;gap:10px;
+  }
+  .includes-photos img{
+    width:100%;height:170px;object-fit:cover;
+    filter:grayscale(15%) contrast(1.05);
+    transition:filter .3s ease, transform .3s ease;
+  }
+  .includes-photos img:hover{filter:grayscale(0%);transform:scale(1.02);}
+  .includes-note{
+    font-size:13px;color:#6f6d66;margin-top:16px;
+    border-left:2px solid var(--gold);padding-left:14px;
+  }
+  .plan-toggle{margin:28px 0 8px;}
+
+  .ig-price{
+    padding:70px 0 90px;
+    text-align:center;
+    background:var(--ink);
+    color:var(--text-hi);
+  }
+  .ig-price .eyebrow{justify-content:center;}
+  .ig-price .eyebrow::before{display:none;}
+  .price-big{
+    font-family:var(--display);
+    font-size:clamp(64px,12vw,120px);
+    color:var(--gold);
+    line-height:1;
+    margin:14px 0 4px;
+  }
+  .price-big span{font-family:var(--mono);font-size:18px;color:var(--text-low);text-transform:uppercase;vertical-align:middle;margin-left:8px;}
+  .ig-price .btn{margin-top:30px;}
+
+  .ig-results{padding:0 0 110px;}
+  .results-grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:24px;
+    margin-top:20px;
+  }
+  .result-card{
+    border:1px solid var(--line-onlight);padding:26px 22px;border-radius:2px;
+  }
+  .result-card .ic{font-family:var(--display);font-size:22px;color:var(--gold);margin-bottom:12px;display:block;letter-spacing:0.04em;}
+  .result-card p{font-size:14px;color:#4a483f;}
+
+  /* ---------- FOUNDER ---------- */
+  .founder{
+    background:var(--paper);color:var(--ink);
+    padding:100px 0;
+  }
+  .founder-grid{
+    display:grid;grid-template-columns:0.8fr 1.2fr;gap:56px;align-items:center;
+  }
+  .founder-photo{position:relative;}
+  .founder-photo img{border-radius:2px;filter:grayscale(30%);}
+  .founder-photo a{
+    position:absolute;bottom:16px;left:16px;
+    background:var(--ink);color:var(--paper);
+    font-family:var(--mono);font-size:11px;letter-spacing:0.08em;
+    padding:9px 14px;border-radius:20px;
+    display:flex;align-items:center;gap:6px;
+  }
+  .founder h2{color:var(--ink);font-size:clamp(30px,5vw,46px);margin-bottom:20px;}
+  .founder p{color:#4a483f;font-size:15px;margin-bottom:14px;max-width:60ch;}
+  .founder strong{color:var(--ink);}
+
+  /* ---------- FINAL CTA ---------- */
+  .final{
+    padding:120px 0 100px;
+    text-align:center;
+    background:radial-gradient(circle at 50% 0%, #17140d 0%, var(--ink) 55%);
+  }
+  .final h2{font-size:clamp(38px,7vw,72px);margin:18px 0 16px;color:var(--text-hi);}
+  .final .btn-row{justify-content:center;}
+  .final .fine{
+    font-family:var(--mono);font-size:12px;color:var(--text-low);
+    margin-top:26px;letter-spacing:0.04em;
+  }
+
+  footer{
+    padding:36px 0 120px;
+    text-align:center;
+    font-family:var(--mono);font-size:12px;color:var(--text-low);
+    letter-spacing:0.06em;
+  }
+
+  /* sticker decorativos */
+  .sticker{
+    position:absolute;z-index:1;
+    width:60px;height:60px;border-radius:50%;
+    background:rgba(246,244,239,0.94);
+    border:1px solid rgba(255,255,255,0.4);
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+    box-shadow:0 10px 26px rgba(0,0,0,0.28);
+  }
+  .sticker.rot-l{transform:rotate(-9deg);}
+  .sticker.rot-r{transform:rotate(8deg);}
+  .s-cam{top:14%;right:6%;}
+  .s-light{bottom:20%;left:4%;}
+  .s-spark{top:8%;left:8%;width:44px;height:44px;font-size:20px;}
+  @media (max-width:700px){ .sticker{display:none;} }
+
+  .chip-row{
+    display:flex;flex-wrap:wrap;gap:10px;margin-top:22px;
+  }
+  .testi-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:36px;}
+  @media (max-width:700px){ .testi-grid{grid-template-columns:1fr;} }
+  .runway-strip{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:28px;
+  }
+  .runway-strip img{
+    width:100%;height:420px;object-fit:cover;border-radius:4px;
+    filter:grayscale(10%) contrast(1.05);
+    transition:filter .3s ease, transform .3s ease;
+  }
+  .runway-strip img:hover{filter:grayscale(0%);transform:scale(1.02);}
+  @media (max-width:860px){
+    .runway-strip{grid-template-columns:1fr;}
+    .runway-strip img{height:340px;}
+  }
+  .phone-frame{
+    position:relative;
+    border-radius:34px;
+    padding:26px 6px 6px 6px;
+    background:#0B0B0C;
+    box-shadow:0 16px 40px rgba(0,0,0,0.18);
+  }
+  .phone-frame img{
+    width:100%;display:block;border-radius:0 0 28px 28px;
+  }
+  .phone-frame::before{
+    content:'';
+    position:absolute;top:9px;left:50%;transform:translateX(-50%);
+    width:70px;height:16px;border-radius:12px;
+    background:#0B0B0C;
+    z-index:2;
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,0.06);
+  }
+  .chip{
+    font-family:var(--mono);font-size:12px;
+    display:inline-flex;align-items:center;gap:7px;
+    padding:9px 14px;border-radius:24px;
+    background:#fff;border:1px solid var(--line-onlight);
+    color:#4a483f;
+    box-shadow:0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  /* sticky mobile bar */
+  .sticky-cta{
+    position:fixed;bottom:0;left:0;right:0;z-index:50;
+    background:rgba(11,11,12,0.92);
+    backdrop-filter:blur(10px);
+    border-top:1px solid var(--line);
+    padding:12px 16px;
+    display:none;
+    align-items:center;justify-content:space-between;
+    gap:12px;
+  }
+  .sticky-cta span{font-family:var(--mono);font-size:12px;color:var(--text-mid);}
+  .sticky-cta .btn{padding:12px 18px;font-size:12px;}
+
+  /* ---------- RESPONSIVE ---------- */
+  @media (max-width: 860px){
+    .advise-grid{grid-template-columns:1fr;gap:36px;}
+    .includes-grid{grid-template-columns:1fr;gap:32px;}
+    .pass-grid{grid-template-columns:1fr;}
+    .gallery-grid{grid-template-columns:repeat(2,1fr);}
+    .founder-grid{grid-template-columns:1fr;}
+    .founder-photo{max-width:280px;margin:0 auto;}
+    .ig-checklist{grid-template-columns:1fr;}
+    .results-grid{grid-template-columns:1fr;}
+    .sticky-cta{display:flex;}
+    .final{padding-bottom:140px;}
+  }
+  @media (max-width: 480px){
+    .wrap{padding:0 18px;}
+    .hero{padding-top:100px;}
+    .btn{padding:14px 20px;font-size:12px;}
+    .gallery-grid img{height:160px;}
+  }
+</style>
+</head>
+<body>
+
+  <div style="background:var(--ink);padding:12px 0;">
+    <div class="wrap" style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;">
+      <span style="font-family:var(--mono);font-size:12px;color:var(--text-mid);letter-spacing:0.04em;">LP · PASARELA INTERNA</span>
+      <a href="https://www.instagram.com/pasarelainterna/" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:12px;color:var(--celeste);letter-spacing:0.04em;display:flex;align-items:center;gap:6px;">@pasarelainterna · +2.000 seguidores →</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap fade in">
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Commercial Club</div>
+          <h1>Dejá de esperar que aparezcan oportunidades.<br><em>Empezá a prepararte para conseguirlas.</em></h1>
+          <p class="lead">La comunidad privada de Pasarela Interna para modelos y creadores que quieren entrar al mundo del modelaje comercial, la publicidad y la creación de contenido.</p>
+          <p class="hero-close">Empezá a construir un perfil que no solo espere oportunidades, sino que también sepa generarlas.</p>
+          <div class="hero-stats">
+            <div class="stat"><b>+180</b><span>Personas ya adentro</span></div>
+            <div class="stat"><b>+120</b><span>Modelos y creadores formados</span></div>
+          </div>
+          <div class="hero-alt"><a href="#asesoria">¿Preferís antes una asesoría gratuita, según disponibilidad? →</a></div>
+        </div>
+
+        <div class="membership-card fade">
+          <span class="card-label">Commercial Club</span>
+          <div class="card-divider"></div>
+          <ul class="card-benefits">
+            <li>Castings + oportunidades laborales</li>
+            <li>Clases grupales cada 15 días</li>
+            <li>Ebook Content Creator + plan de acción</li>
+            <li>Prospección y profesionalización</li>
+            <li>Comunidad + acompañamiento</li>
+          </ul>
+          <div class="card-divider"></div>
+          <div class="card-access">Acceso durante 90 días</div>
+          <div class="card-price">$10.000</div>
+          <a class="btn btn-primary card-cta" href="https://forms.gle/dyhJ8CFU1yznaD5m8" target="_blank" rel="noopener">Quiero entrar al Commercial Club →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ASESORIA GRATIS -->
+  <section class="section-light" id="asesoria" style="padding-top:60px;">
+    <div class="wrap" style="margin-bottom:60px;">
+      <a href="https://www.instagram.com/stories/highlights/18010624181755109/" target="_blank" rel="noopener" class="fade" style="display:flex;align-items:center;gap:18px;background:var(--ink);border-radius:6px;padding:20px 24px;max-width:520px;">
+        <span style="flex-shrink:0;width:52px;height:52px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:20px;">▶</span>
+        <span>
+          <span style="display:block;font-family:var(--mono);font-size:11px;color:var(--celeste);letter-spacing:0.06em;text-transform:uppercase;">Destacada de Instagram</span>
+          <span style="display:block;color:var(--text-hi);font-weight:700;font-size:15px;margin-top:4px;">Mirá cómo es por dentro →</span>
+        </span>
+      </a>
+    </div>
+    <div class="wrap">
+      <div class="eyebrow light">Asesoría sujeta a disponibilidad</div>
+      <div class="advise-grid">
+        <div class="fade">
+          <h2>¿Querés claridad antes de invertir en algo?</h2>
+          <p class="lead">Pedí una asesoría gratuita con Pasarela Interna. Cupos limitados, sujeta a disponibilidad. Es una sesión corta, directa, y vas a salir sabiendo exactamente dónde estás parado/a.</p>
+          <ul class="advise-list">
+            <li><span class="advise-num">01</span>Analizamos tu punto de partida</li>
+            <li><span class="advise-num">02</span>Detectamos qué te está frenando</li>
+            <li><span class="advise-num">03</span>Diseñamos tus primeros pasos estratégicos</li>
+            <li><span class="advise-num">04</span>Vemos si estás listo/a para profesionalizar tu perfil</li>
+          </ul>
+        </div>
+        <div class="advise-card fade">
+          <span class="price-tag">Sin costo · según disponibilidad</span>
+          <h3>Asesoría 1:1</h3>
+          <p>Todos los meses abrimos cupos para trabajar directamente de la mano de profesionales.</p>
+          <a class="btn btn-primary" style="width:100%;justify-content:center;" href="https://calendar.app.google/JsUkop9gxK18GsuJA" target="_blank" rel="noopener">Quiero mi asesoría →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OFERTAS - BACKSTAGE PASSES -->
+  <section class="offers section-light" id="ofertas">
+    <div class="wrap">
+      <div class="offers-head fade">
+        <div class="eyebrow light">Elegí tu próximo paso</div>
+        <h2>Dos formas de avanzar más rápido</h2>
+        <p class="lead">Cada propuesta está pensada para una etapa distinta. Elegí la que se adapta a vos hoy, sin perder tiempo ni plata en información dispersa.</p>
+      </div>
+
+      <div class="pass-grid">
+
+        <!-- COMMERCIAL CLUB -->
+        <div class="pass fade">
+          <div class="pass-stamp">LP<br>90D</div>
+          <div class="pass-top">
+            <span class="pass-badge">Comunidad VIP · 90 días</span>
+            <h3>Commercial Club</h3>
+            <div class="pass-price">$10.000 <small>/ 90 días</small></div>
+            <div style="font-family:var(--mono);font-size:11px;color:var(--celeste);margin-top:6px;">+180 personas ya adentro</div>
+          </div>
+          <div class="pass-perf"></div>
+          <div class="pass-body">
+            <p style="font-size:13px;color:var(--text-mid);margin-bottom:14px;">Un espacio pensado al detalle: no es un grupo más de WhatsApp, es tu entrada a un tremendo ecosistema de oportunidades reales.</p>
+            <ul>
+              <li>Castings y oportunidades laborales reales cada semana</li>
+              <li>Contactos y forma de postular a cada oportunidad</li>
+              <li>Ebook incluido: guía de modelaje y creación de contenido</li>
+              <li>2 clases en vivo mensuales de prospección, mentalidad, modelaje comercial y contenido</li>
+            </ul>
+            <p style="font-size:12px;color:var(--text-low);margin-bottom:16px;line-height:1.5;">Cómo funciona: completás el formulario, te queda pendiente de aprobación, y te escribimos con los datos para transferir. Una vez confirmado el pago, entrás al grupo y te mandamos el ebook.</p>
+            <a class="btn btn-outline" href="https://forms.gle/dyhJ8CFU1yznaD5m8" target="_blank" rel="noopener">Quiero empezar →</a>
+          </div>
+        </div>
+
+        <!-- IMPULSO GANADOR -->
+        <div class="pass featured fade">
+          <div class="pass-stamp">LP<br>1:1</div>
+          <div class="pass-top">
+            <span class="pass-badge">Mentoría estratégica</span>
+            <h3>Impulso Ganador</h3>
+            <div class="pass-price">$42 USD <small>/ mes</small></div>
+          </div>
+          <div class="pass-perf"></div>
+          <div class="pass-body">
+            <ul>
+              <li>Diagnóstico, presencia en cámara y marca personal</li>
+              <li>Perfil profesional que atraiga marcas y agencias</li>
+              <li>Negociación y media kit: ejecución en vivo</li>
+              <li>Especialización en tu rama: modelaje o UGC</li>
+            </ul>
+            <a class="btn btn-primary" href="#impulso-ganador">Ver todo lo que incluye ↓</a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIOS -->
+  <section class="section-light" id="testimonios">
+    <div class="wrap fade">
+      <div class="eyebrow light">Resultados reales</div>
+      <h2 style="font-size:clamp(28px,4.5vw,42px);margin:16px 0 8px;max-width:24ch;">Esto no lo contamos nosotros, lo cuentan ellos</h2>
+      <p class="lead">Capturas reales del grupo — modelos y creadores compartiendo sus propios avances.</p>
+      <div class="testi-grid">
+        <div class="phone-frame"><img src="images/testimonio-facu.jpg" alt="Testimonio de Facu en el grupo"></div>
+        <div class="phone-frame"><img src="images/testimonio-julietta.jpg" alt="Testimonio de Julietta en el grupo"></div>
+      </div>
+      <p class="includes-note" style="margin-top:24px;">Acompañamiento de Pasarela Interna.</p>
+    </div>
+  </section>
+
+  <!-- IMPULSO GANADOR - FULL -->
+  <section class="ig-hero" id="impulso-ganador">
+    <div class="wrap fade">
+      <div class="eyebrow">La solución completa</div>
+      <h2>Tu camino profesional<br>como modelo comercial<br>y creador de contenido</h2>
+      <p class="lead">Si el Commercial Club es tu puerta de entrada, Impulso Ganador es la mentoría 1:1 que te lleva de intentarlo solo a tener un sistema real: marca personal, contactos y un plan concreto para vivir de tu imagen.</p>
+      <ul class="ig-checklist">
+        <li>Marca personal clara y contenido que la refleje</li>
+        <li>Media kit + sistema para contactar marcas</li>
+        <li>Una especialización de nicho trabajada a fondo</li>
+        <li>Video de presentación, casting y búsqueda activa de agencias, con el acompañamiento real de Pasarela Interna: no solo teoría</li>
+        <li>Plan de acción de 90 días para sostener resultados</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="ig-includes section-light">
+    <div class="wrap fade">
+      <div class="eyebrow light">Qué vas a tener</div>
+      <h2 style="font-size:clamp(28px,4.5vw,42px);margin:16px 0 8px;max-width:22ch;">El plan completo, semana por semana</h2>
+      <p class="lead" style="margin-bottom:8px;">Mentoría 1:1 con Pasarela Interna: sesiones semanales en vivo durante 12 semanas, no contenido grabado. Cada clase tiene teoría + bloque práctico: salís con algo hecho, no solo con ideas.</p>
+      <button class="btn btn-dark plan-toggle" id="planToggleBtn">Ver el plan completo, semana por semana ↓</button>
+      <div class="includes-grid" id="planContent" style="display:none;">
+        <div>
+          <div class="includes-block">
+            <h4>Tronco común (semanas 1 a 7)</h4>
+            <ul class="includes-list">
+              <li><span class="includes-num">01</span>Diagnóstico + presencia en cámara</li>
+              <li><span class="includes-num">02</span>Marca personal I + organización de perfil</li>
+              <li><span class="includes-num">03</span>Marca personal II: identidad visual</li>
+              <li><span class="includes-num">04</span>Media kit: armado en vivo en Canva</li>
+              <li><span class="includes-num">05</span>Prospección a marcas: primer mensaje real enviado</li>
+              <li><span class="includes-num">06</span>Negociación y acuerdos: contratos y objeciones</li>
+              <li><span class="includes-num">07</span>Contenido y calendario: 4 semanas listas para publicar</li>
+            </ul>
+          </div>
+          <div class="includes-block">
+            <h4>Especialización (semanas 8 a 10): elegís tu rama</h4>
+            <ul class="includes-list">
+              <li><span class="includes-num">→</span>Rama Modelaje: 8 verticales. Incluye cómo presentarte en castings, video de presentación y búsqueda activa de agencias con Pasarela Interna</li>
+              <li><span class="includes-num">→</span>Rama UGC: 14 verticales de creación de contenido</li>
+              <li><span class="includes-num">11</span>Aplicación práctica: 1 pieza de contenido real con feedback en vivo</li>
+              <li><span class="includes-num">12</span>Módulo final: plan de acción de 90 días</li>
+            </ul>
+          </div>
+          <p class="includes-note">Si tu perfil incluye modelaje comercial, Pasarela Interna te acompaña en la búsqueda de castings y agencias reales. No es solo un módulo teórico.</p>
+        </div>
+        <div class="includes-photos">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/14108316/68cc5db4ae6a8_WhatsAppImage2025-09-18at16.29.21.jpeg" alt="Impulso Ganador">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/11254295/68da21d153424_WhatsAppImage2025-09-29at03.05.18.jpeg" alt="Impulso Ganador">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/14108316/68cc5e176a2b1_WhatsAppImage2025-09-18at16.29.222.jpeg" alt="Impulso Ganador">
+          <img src="https://d1yei2z3i6k35z.cloudfront.net/11254295/68da22f2c6d8c_WhatsAppImage2025-09-29at03.05.191.jpeg" alt="Impulso Ganador">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="ig-price">
+    <div class="wrap fade">
+      <div class="eyebrow">Oferta especial</div>
+      <div class="price-big">$42<span>USD / mes</span></div>
+      <a class="btn btn-primary" href="https://pay.hotmart.com/O102155443X?off=pq1dv6hx" target="_blank" rel="noopener">Quiero mi lugar →</a>
+    </div>
+  </section>
+
+  <section class="ig-results section-light">
+    <div class="wrap fade">
+      <div class="eyebrow light">Qué vas a lograr</div>
+      <h2 style="font-size:clamp(28px,4.5vw,42px);margin:16px 0 8px;max-width:20ch;">Resultados después de aplicar el material</h2>
+      <div class="results-grid">
+        <div class="result-card"><span class="ic">I</span><p>Perfil de Instagram profesional que llame la atención de marcas y agencias</p></div>
+        <div class="result-card"><span class="ic">II</span><p>Tus primeras colaboraciones y canjes, aunque no tengas experiencia previa</p></div>
+        <div class="result-card"><span class="ic">III</span><p>Media kit y portafolio sólido para presentarte de forma profesional</p></div>
+        <div class="result-card"><span class="ic">IV</span><p>Saber exactamente qué ofrecer y cómo negociar con marcas y agencias</p></div>
+        <div class="result-card"><span class="ic">V</span><p>Diferenciarte como modelo freelancer o creador de contenido</p></div>
+        <div class="result-card"><span class="ic">VI</span><p>Medir resultados de cada colaboración y preparar el salto a trabajos pagos</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GALERIA PASARELA -->
+  <section class="section-light" id="pasarela">
+    <div class="wrap fade">
+      <div class="eyebrow light">Esto no es solo teoría</div>
+      <h2 style="font-size:clamp(28px,4.5vw,42px);margin:16px 0 8px;max-width:22ch;">Ignacio Godoy en pasarela, con ISSDAMO GENDER</h2>
+      <p class="lead">Modelaje, dirección de desfiles y marca propia: todo lo que enseña en Pasarela Interna lo vivió primero arriba del escenario.</p>
+      <div class="runway-strip">
+        <img src="https://i.postimg.cc/vHvJscbk/Whats-App-Image-2026-08-29-at-17-40-49.jpg" alt="Ignacio Godoy en pasarela ISSDAMO GENDER">
+        <img src="https://i.postimg.cc/pddx7KjC/Whats-App-Image-2026-08-29-at-17-40-43.jpg" alt="Ignacio Godoy en pasarela ISSDAMO GENDER">
+        <img src="https://i.postimg.cc/zGxYn3Q0/Whats-App-Image-2026-08-29-at-17-40-26.jpg" alt="Ignacio Godoy en pasarela ISSDAMO GENDER">
+      </div>
+    </div>
+  </section>
+
+  <!-- FOUNDER -->
+  <section class="founder">
+    <div class="wrap founder-grid">
+      <div class="founder-photo fade">
+        <img src="https://d1yei2z3i6k35z.cloudfront.net/14108316/68b9c55914281_WhatsAppImage2025-09-04at13.58.51.jpeg" alt="Ignacio Godoy">
+        <a href="https://instagram.com/ignaciogodoyn" target="_blank" rel="noopener">Seguir en Instagram →</a>
+      </div>
+      <div class="fade">
+        <div class="eyebrow light">Sobre el fundador</div>
+        <h2>Ignacio Godoy</h2>
+        <p>Empecé mi carrera como modelo a principios de 2020 y desde entonces no paré de formarme y crecer. Tomé numerosos cursos y capacitaciones, diseñé y lancé mi propia marca de ropa, y trabajé en producciones fotográficas, revistas y canales de streaming.</p>
+        <p>Eso me permitió entender lo que las marcas buscan y también lo que un modelo necesita para crecer de forma profesional y auténtica. A lo largo del camino coacheé a <strong>más de 200 modelos</strong>, ayudándolos a superar miedos, ganar confianza y construir su mejor versión.</p>
+        <p>Trabajo con un enfoque integral (energía, amor propio, autoconocimiento y crecimiento personal) para que no solo aprendas modelaje y creación de contenido, sino que también te descubras y te empoderes desde dentro.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final">
+    <div class="wrap fade">
+      <div class="eyebrow" style="justify-content:center;">Tu lugar te está esperando</div>
+      <h2>Empezá hoy,<br>no mañana</h2>
+      <div class="btn-row">
+        <a class="btn btn-primary" href="https://forms.gle/dyhJ8CFU1yznaD5m8" target="_blank" rel="noopener">Sumate al Commercial Club →</a>
+      </div>
+      <div class="fine">Pago por transferencia. Cupos nuevos todos los meses.</div>
+    </div>
+  </section>
+
+  <footer>PASARELA INTERNA · @pasarelainterna</footer>
+
+  <div class="sticky-cta">
+    <span>Sumate al Commercial Club</span>
+    <a class="btn btn-primary" href="https://forms.gle/dyhJ8CFU1yznaD5m8" target="_blank" rel="noopener">Entrar →</a>
+  </div>
+
+  <script>
+    const obs = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){ e.target.classList.add('in'); obs.unobserve(e.target); }
+      });
+    }, {threshold:0.15});
+    document.querySelectorAll('.fade').forEach(el=>obs.observe(el));
+
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+      document.querySelectorAll('.fade').forEach(el=>el.classList.add('in'));
+    }
+
+    const planBtn = document.getElementById('planToggleBtn');
+    const planContent = document.getElementById('planContent');
+    planBtn.addEventListener('click', ()=>{
+      const isHidden = planContent.style.display === 'none';
+      planContent.style.display = isHidden ? 'grid' : 'none';
+      planBtn.textContent = isHidden ? 'Ocultar plan ↑' : 'Ver el plan completo, semana por semana ↓';
+      if(isHidden){ planContent.classList.add('fade'); requestAnimationFrame(()=>planContent.classList.add('in')); }
+    });
+  </script>
+
+</body>
+</html>
